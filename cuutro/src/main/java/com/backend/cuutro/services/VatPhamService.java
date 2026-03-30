@@ -4,26 +4,25 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
 import com.backend.cuutro.dto.request.VatPhamFilterRequest;
+import com.backend.cuutro.dto.request.VatPhamUpsertRequest;
+import com.backend.cuutro.dto.response.entities.VatPhamDto;
 import com.backend.cuutro.entities.VatPhamEntity;
-import com.backend.cuutro.repository.VatPhamRepository;
-import com.backend.cuutro.repository.specification.VatPhamSpecifications;
 
-import lombok.RequiredArgsConstructor;
+public interface VatPhamService {
 
-@Service
-@RequiredArgsConstructor
-public class VatPhamService {
+	Page<VatPhamEntity> search(VatPhamFilterRequest filter, Pageable pageable);
 
-	private final VatPhamRepository vatPhamRepository;
+	List<VatPhamEntity> search(VatPhamFilterRequest filter);
 
-	public Page<VatPhamEntity> search(VatPhamFilterRequest filter, Pageable pageable) {
-		return vatPhamRepository.findAll(VatPhamSpecifications.withFilter(filter), pageable);
-	}
+	VatPhamDto create(VatPhamUpsertRequest request);
 
-	public List<VatPhamEntity> search(VatPhamFilterRequest filter) {
-		return vatPhamRepository.findAll(VatPhamSpecifications.withFilter(filter));
-	}
+	VatPhamDto update(Long id, VatPhamUpsertRequest request);
+
+	void delete(Long id);
+
+	VatPhamDto getById(Long id);
+
+	List<VatPhamDto> getAll();
 }

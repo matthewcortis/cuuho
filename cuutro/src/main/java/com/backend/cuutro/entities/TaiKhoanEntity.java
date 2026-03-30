@@ -3,6 +3,8 @@ package com.backend.cuutro.entities;
 import java.io.Serializable;
 import java.time.Instant;
 
+import com.backend.cuutro.constant.enums.RoleType;
+
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -52,16 +54,11 @@ public class TaiKhoanEntity implements Serializable {
 	@Enumerated(EnumType.STRING)
 	@ColumnDefault("'USER'")
 	@Column(name = "vai_tro")
-	private VaiTro vaiTro;
+	private RoleType vaiTro;
 
 	@CreationTimestamp
 	@ColumnDefault("CURRENT_TIMESTAMP")
 	@Column(name = "created_at", updatable = false)
 	private Instant createdAt;
 
-	public enum VaiTro {
-		ADMIN,
-		USER,
-		VOLUNTEER
-	}
 }

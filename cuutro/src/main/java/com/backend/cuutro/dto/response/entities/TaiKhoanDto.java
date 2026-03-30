@@ -2,7 +2,8 @@ package com.backend.cuutro.dto.response.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
-import com.backend.cuutro.entities.TaiKhoanEntity;
+
+import com.backend.cuutro.constant.enums.RoleType;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -29,7 +30,7 @@ public class TaiKhoanDto implements Serializable {
 	String tenDangNhap;
 	String matKhau;
 	Boolean trangThai;
-	TaiKhoanEntity.VaiTro vaiTro;
+	RoleType vaiTro;
 	Instant createdAt;
 
 }
