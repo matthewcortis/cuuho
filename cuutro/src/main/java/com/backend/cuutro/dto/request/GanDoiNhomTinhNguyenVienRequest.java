@@ -1,6 +1,6 @@
 package com.backend.cuutro.dto.request;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,12 +15,14 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class NhomVatPhamUpsertRequest {
+public class GanDoiNhomTinhNguyenVienRequest {
 
-	@NotBlank(message = "ten is required")
-	String ten;
+	@NotNull(message = "tinhNguyenVienId is required")
+	Long tinhNguyenVienId;
 
-	String moTa;
+	@NotNull(message = "doiNhomId is required")
+	Long doiNhomId;
 
-	Long loaiSuCoId;
+	String vaiTro;
 }
+

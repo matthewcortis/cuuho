@@ -51,8 +51,12 @@ public class TinhNguyenVienEntity implements Serializable {
 	@Column(name = "co_the_giup")
 	private String coTheGiup;
 
-	@Column(name = "trang_thai")
-	private Boolean trangThai;
+	@ColumnDefault("'CHO_XET_DUYET'")
+	@Column(name = "trang_thai_duyet")
+	private String trangThaiDuyet;
+
+	@Column(name = "thoi_gian_duyet")
+	private LocalDateTime thoiGianDuyet;
 
 	@CreationTimestamp
 	@ColumnDefault("CURRENT_TIMESTAMP")

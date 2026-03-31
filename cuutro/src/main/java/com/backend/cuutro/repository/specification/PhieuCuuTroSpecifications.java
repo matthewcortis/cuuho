@@ -31,8 +31,8 @@ public final class PhieuCuuTroSpecifications {
 		if (StringUtils.hasText(filter.getTrangThai())) {
 			specification = specification.and(hasTrangThai(filter.getTrangThai()));
 		}
-		if (filter.getDanhSachCuuTroId() != null) {
-			specification = specification.and(hasDanhSachCuuTroId(filter.getDanhSachCuuTroId()));
+		if (filter.getLoaiSuCoId() != null) {
+			specification = specification.and(hasLoaiSuCoId(filter.getLoaiSuCoId()));
 		}
 		if (filter.getViTriId() != null) {
 			specification = specification.and(hasViTriId(filter.getViTriId()));
@@ -64,8 +64,8 @@ public final class PhieuCuuTroSpecifications {
 		return (root, query, cb) -> cb.equal(cb.lower(root.get("trangThai")), trangThai.trim().toLowerCase());
 	}
 
-	public static Specification<PhieuCuuTroEntity> hasDanhSachCuuTroId(Long danhSachCuuTroId) {
-		return (root, query, cb) -> cb.equal(root.join("danhSachCuuTro", JoinType.LEFT).get("id"), danhSachCuuTroId);
+	public static Specification<PhieuCuuTroEntity> hasLoaiSuCoId(Long loaiSuCoId) {
+		return (root, query, cb) -> cb.equal(root.join("loaiSuCo", JoinType.LEFT).get("id"), loaiSuCoId);
 	}
 
 	public static Specification<PhieuCuuTroEntity> hasViTriId(Long viTriId) {

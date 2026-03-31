@@ -26,6 +26,7 @@ public class NhomVatPhamDto implements Serializable {
 	Long id;
 	String ten;
 	String moTa;
+	LoaiSuCoDto loaiSuCo;
 	Instant createdAt;
 
 }

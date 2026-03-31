@@ -26,15 +26,6 @@ CREATE TABLE public.chi_tiet_cuu_tro (
   CONSTRAINT fk_phieu FOREIGN KEY (phieu_cuu_tro_id) REFERENCES public.phieu_cuu_tro(id),
   CONSTRAINT fk_vat_pham FOREIGN KEY (vat_pham_id) REFERENCES public.vat_pham(id)
 );
-CREATE TABLE public.danh_sach_cuu_tro (
-  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
-  ten character varying,
-  icon_url character varying,
-  vat_pham_id bigint,
-  created_at timestamp with time zone DEFAULT now(),
-  CONSTRAINT danh_sach_cuu_tro_pkey PRIMARY KEY (id),
-  CONSTRAINT danh_sach_cuu_tro_vat_pham_id_fkey FOREIGN KEY (vat_pham_id) REFERENCES public.vat_pham(id)
-);
 CREATE TABLE public.doi_nhom (
   id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
   ten_doi_nhom character varying,
@@ -69,6 +60,13 @@ CREATE TABLE public.khai_bao (
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   CONSTRAINT khai_bao_pkey PRIMARY KEY (id)
 );
+CREATE TABLE public.loai_su_co (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  ten character varying,
+  icon_url character varying,
+  created_at timestamp with time zone DEFAULT now(),
+  CONSTRAINT loai_su_co_pkey PRIMARY KEY (id)
+);
 CREATE TABLE public.nguoi_dung (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
   tai_khoan_id bigint,
@@ -92,7 +90,9 @@ CREATE TABLE public.nhom_vat_pham (
   ten character varying,
   mo_ta character varying,
   created_at timestamp with time zone DEFAULT now(),
-  CONSTRAINT nhom_vat_pham_pkey PRIMARY KEY (id)
+  loai_su_co_id bigint,
+  CONSTRAINT nhom_vat_pham_pkey PRIMARY KEY (id),
+  CONSTRAINT nhom_vat_pham_danh_sach_cuu_tro_id_fkey FOREIGN KEY (loai_su_co_id) REFERENCES public.loai_su_co(id)
 );
 CREATE TABLE public.phan_cong (
   id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
@@ -113,7 +113,7 @@ CREATE TABLE public.phan_quyen (
 );
 CREATE TABLE public.phieu_cuu_tro (
   id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
-  danh_sach_cuu_tro_id bigint,
+  loai_su_co_id bigint,
   vi_tri_id bigint,
   tep_tin_id bigint,
   nguoi_dung_id uuid,
@@ -123,7 +123,7 @@ CREATE TABLE public.phieu_cuu_tro (
   trang_thai character varying DEFAULT 'pending'::text CHECK (trang_thai::text = ANY (ARRAY['pending'::text, 'assigned'::text, 'processing'::text, 'done'::text])),
   created_at timestamp with time zone DEFAULT now(),
   CONSTRAINT phieu_cuu_tro_pkey PRIMARY KEY (id),
-  CONSTRAINT phieu_cuu_tro_danh_sach_cuu_tro_id_fkey FOREIGN KEY (danh_sach_cuu_tro_id) REFERENCES public.danh_sach_cuu_tro(id),
+  CONSTRAINT phieu_cuu_tro_danh_sach_cuu_tro_id_fkey FOREIGN KEY (loai_su_co_id) REFERENCES public.loai_su_co(id),
   CONSTRAINT phieu_cuu_tro_vi_tri_id_fkey FOREIGN KEY (vi_tri_id) REFERENCES public.vi_tri(id),
   CONSTRAINT phieu_cuu_tro_tep_tin_id_fkey FOREIGN KEY (tep_tin_id) REFERENCES public.tep_tin(id),
   CONSTRAINT phieu_cuu_tro_nguoi_dung_id_fkey FOREIGN KEY (nguoi_dung_id) REFERENCES public.nguoi_dung(id)
@@ -174,8 +174,9 @@ CREATE TABLE public.tinh_nguyen_vien (
   thoi_gian timestamp without time zone,
   ghi_chu character varying,
   co_the_giup character varying,
-  trang_thai boolean,
   created_at timestamp with time zone DEFAULT now(),
+  trang_thai_duyet text DEFAULT 'CHO_XET_DUYET'::text CHECK (trang_thai_duyet = ANY (ARRAY['CHO_XET_DUYET'::text, 'DUOC_DUYET'::text, 'HUY'::text])),
+  thoi_gian_duyet timestamp without time zone,
   CONSTRAINT tinh_nguyen_vien_pkey PRIMARY KEY (id),
   CONSTRAINT tinh_nguyen_vien_nguoi_dung_id_fkey FOREIGN KEY (nguoi_dung_id) REFERENCES public.nguoi_dung(id)
 );

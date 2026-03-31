@@ -8,12 +8,9 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,8 +24,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "danh_sach_cuu_tro")
-public class DanhSachCuuTroEntity implements Serializable {
+@Table(name = "loai_su_co")
+public class LoaiSuCoEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -42,10 +39,6 @@ public class DanhSachCuuTroEntity implements Serializable {
 
 	@Column(name = "icon_url")
 	private String iconUrl;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "vat_pham_id")
-	private VatPhamEntity vatPham;
 
 	@CreationTimestamp
 	@ColumnDefault("CURRENT_TIMESTAMP")

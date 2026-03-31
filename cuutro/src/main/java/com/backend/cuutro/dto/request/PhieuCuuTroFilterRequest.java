@@ -19,7 +19,7 @@ public class PhieuCuuTroFilterRequest {
 	private String hoTen;
 	private String sdt;
 	private String trangThai;
-	private Long danhSachCuuTroId;
+	private Long loaiSuCoId;
 	private Long viTriId;
 	private Long tepTinId;
 	private UUID nguoiDungId;

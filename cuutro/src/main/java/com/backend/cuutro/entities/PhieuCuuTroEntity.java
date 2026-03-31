@@ -38,8 +38,8 @@ public class PhieuCuuTroEntity implements Serializable {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "danh_sach_cuu_tro_id")
-	private DanhSachCuuTroEntity danhSachCuuTro;
+	@JoinColumn(name = "loai_su_co_id")
+	private LoaiSuCoEntity loaiSuCo;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "vi_tri_id")

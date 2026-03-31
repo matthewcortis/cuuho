@@ -24,7 +24,7 @@ import lombok.experimental.FieldDefaults;
 @EqualsAndHashCode(of = {"id"})
 public class PhieuCuuTroDto implements Serializable {
 	Long id;
-	DanhSachCuuTroDto danhSachCuuTro;
+	LoaiSuCoDto loaiSuCo;
 	ViTriDto viTri;
 	TepTinDto tepTin;
 	NguoiDungDto nguoiDung;

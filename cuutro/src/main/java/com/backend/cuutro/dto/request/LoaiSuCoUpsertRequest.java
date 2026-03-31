@@ -15,12 +15,11 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class NhomVatPhamUpsertRequest {
+public class LoaiSuCoUpsertRequest {
 
 	@NotBlank(message = "ten is required")
 	String ten;
 
-	String moTa;
-
-	Long loaiSuCoId;
+	String iconUrl;
 }
+

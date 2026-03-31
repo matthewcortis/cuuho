@@ -29,7 +29,8 @@ public class TinhNguyenVienDto implements Serializable {
 	LocalDateTime thoiGian;
 	String ghiChu;
 	String coTheGiup;
-	Boolean trangThai;
+	String trangThaiDuyet;
+	LocalDateTime thoiGianDuyet;
 	Instant createdAt;
 
 }
