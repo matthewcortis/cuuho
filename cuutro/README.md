@@ -175,7 +175,7 @@ CREATE TABLE public.tinh_nguyen_vien (
   ghi_chu character varying,
   co_the_giup character varying,
   created_at timestamp with time zone DEFAULT now(),
-  trang_thai_duyet text DEFAULT 'CHO_XET_DUYET'::text CHECK (trang_thai_duyet = ANY (ARRAY['CHO_XET_DUYET'::text, 'DUOC_DUYET'::text, 'HUY'::text])),
+  trang_thai_duyet character varying DEFAULT 'CHO_XET_DUYET'::text CHECK (trang_thai_duyet::text = ANY (ARRAY['CHO_XET_DUYET'::text, 'DUOC_DUYET'::text, 'HUY'::text])),
   thoi_gian_duyet timestamp without time zone,
   CONSTRAINT tinh_nguyen_vien_pkey PRIMARY KEY (id),
   CONSTRAINT tinh_nguyen_vien_nguoi_dung_id_fkey FOREIGN KEY (nguoi_dung_id) REFERENCES public.nguoi_dung(id)

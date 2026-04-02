@@ -11,4 +11,8 @@ public interface DoiNhomTinhNguyenVienRepository extends JpaRepository<DoiNhomTi
 	boolean existsByDoiNhom_IdAndTinhNguyenVien_Id(Long doiNhomId, Long tinhNguyenVienId);
 
 	long countByTinhNguyenVien_Id(Long tinhNguyenVienId);
+
+	boolean existsByDoiNhom_IdAndVaiTro(Long doiNhomId, String vaiTro);
+
+	boolean existsByTinhNguyenVien_IdAndVaiTro(Long tinhNguyenVienId, String vaiTro);
 }

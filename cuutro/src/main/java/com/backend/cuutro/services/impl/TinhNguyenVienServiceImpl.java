@@ -133,11 +133,13 @@ public class TinhNguyenVienServiceImpl implements TinhNguyenVienService {
 		}
 
 		DoiNhomEntity doiNhom = getDoiNhomOrThrow(request.getDoiNhomId());
+		String vaiTro = chuanHoaVaiTro(request.getVaiTro());
+		validateVaiTroDoiTruong(doiNhom.getId(), tinhNguyenVien.getId(), vaiTro);
 
 		DoiNhomTinhNguyenVienEntity entity = new DoiNhomTinhNguyenVienEntity();
 		entity.setDoiNhom(doiNhom);
 		entity.setTinhNguyenVien(tinhNguyenVien);
-		entity.setVaiTro(chuanHoaVaiTro(request.getVaiTro()));
+		entity.setVaiTro(vaiTro);
 		return doiNhomTinhNguyenVienMapper.toDto(doiNhomTinhNguyenVienRepository.save(entity));
 	}
 
@@ -175,6 +177,18 @@ public class TinhNguyenVienServiceImpl implements TinhNguyenVienService {
 		return normalized;
 	}
 
+	private void validateVaiTroDoiTruong(Long doiNhomId, Long tinhNguyenVienId, String vaiTro) {
+		if (!"truong_nhom".equals(vaiTro)) {
+			return;
+		}
+		if (doiNhomTinhNguyenVienRepository.existsByDoiNhom_IdAndVaiTro(doiNhomId, "truong_nhom")) {
+			throw new InvalidFieldException("Moi doi chi co 1 doi truong");
+		}
+		if (doiNhomTinhNguyenVienRepository.existsByTinhNguyenVien_IdAndVaiTro(tinhNguyenVienId, "truong_nhom")) {
+			throw new InvalidFieldException("Tinh nguyen vien da la doi truong cua doi khac");
+		}
+	}
+
 	private String trimToNull(String value) {
 		if (value == null) {
 			return null;
@@ -183,4 +197,3 @@ public class TinhNguyenVienServiceImpl implements TinhNguyenVienService {
 		return normalized.isEmpty() ? null : normalized;
 	}
 }
-
