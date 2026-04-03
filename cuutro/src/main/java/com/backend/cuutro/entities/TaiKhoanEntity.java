@@ -3,15 +3,15 @@ package com.backend.cuutro.entities;
 import java.io.Serializable;
 import java.time.Instant;
 
+import com.backend.cuutro.config.converter.RoleTypeConverter;
 import com.backend.cuutro.constant.enums.RoleType;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -51,8 +51,8 @@ public class TaiKhoanEntity implements Serializable {
 	@Column(name = "trang_thai")
 	private Boolean trangThai;
 
-	@Enumerated(EnumType.STRING)
-	@ColumnDefault("'USER'")
+	@Convert(converter = RoleTypeConverter.class)
+	@ColumnDefault("'NGUOI_DAN'")
 	@Column(name = "vai_tro")
 	private RoleType vaiTro;
 

@@ -2,6 +2,7 @@ package com.backend.cuutro.repository;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,4 +18,6 @@ public interface TinhNguyenVienRepository extends JpaRepository<TinhNguyenVienEn
 	List<TinhNguyenVienEntity> findAllByOrderByCreatedAtDesc();
 
 	boolean existsByNguoiDung_IdAndTrangThaiDuyetIn(UUID nguoiDungId, Collection<String> trangThaiDuyet);
+
+	Optional<TinhNguyenVienEntity> findByNguoiDung_Id(UUID nguoiDungId);
 }

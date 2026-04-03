@@ -1,6 +1,9 @@
 package com.backend.cuutro.dto.response.entities;
 
 import java.io.Serializable;
+import java.time.Instant;
+
+import com.backend.cuutro.constant.enums.RoleType;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -11,18 +14,20 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
-/**
- * DTO for {@link com.backend.cuutro.entities.NguoiDungPhanQuyenEntity}
- */
 @AllArgsConstructor
 @Getter
 @Setter
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
-@EqualsAndHashCode(of = {"id"})
-public class NguoiDungPhanQuyenDto implements Serializable {
-	Long nguoiDungId;
-	PhanQuyenDto phanQuyen;
+@EqualsAndHashCode
+public class DangNhapResponse implements Serializable {
 
+	String tokenType;
+	String accessToken;
+	Instant expiresAt;
+	Long taiKhoanId;
+	String tenDangNhap;
+	RoleType vaiTro;
 }
+

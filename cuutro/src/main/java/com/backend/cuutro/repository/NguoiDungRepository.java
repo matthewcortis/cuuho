@@ -1,5 +1,6 @@
 package com.backend.cuutro.repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,4 +11,6 @@ import com.backend.cuutro.entities.NguoiDungEntity;
 
 @Repository
 public interface NguoiDungRepository extends JpaRepository<NguoiDungEntity, UUID>, JpaSpecificationExecutor<NguoiDungEntity> {
+
+	Optional<NguoiDungEntity> findByTaiKhoan_Id(Long taiKhoanId);
 }

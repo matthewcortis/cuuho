@@ -2,6 +2,6 @@ package com.backend.cuutro.constant.enums;
 
 public enum RoleType {
     ADMIN,
-    USER,
-    VOLUNTEER
+    NGUOI_DAN,
+    TRUONG_NHOM_TNV
 }
