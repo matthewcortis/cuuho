@@ -1,8 +1,7 @@
 package com.backend.cuutro.dto.response.entities;
 
 import java.io.Serializable;
-import java.time.Instant;
-import java.util.List;
+import java.time.LocalDateTime;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -13,27 +12,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
-/**
- * DTO for {@link com.backend.cuutro.entities.PhieuCuuTroEntity}
- */
 @AllArgsConstructor
 @Getter
 @Setter
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
-@EqualsAndHashCode(of = {"id"})
-public class PhieuCuuTroDto implements Serializable {
+@EqualsAndHashCode(of = { "id" })
+public class PhieuCuuTroChiTietDto implements Serializable {
 	Long id;
-	LoaiSuCoDto loaiSuCo;
-	ViTriDto viTri;
-	TepTinDto tepTin;
-	NguoiDungDto nguoiDung;
-	String hoTen;
-	String sdt;
+	Long vatPhamId;
+	String tenVatPham;
+	Integer soLuong;
 	String ghiChu;
-	String trangThai;
-	List<PhieuCuuTroChiTietDto> chiTietCuuTro;
-	Instant createdAt;
-
+	LocalDateTime createdAt;
 }

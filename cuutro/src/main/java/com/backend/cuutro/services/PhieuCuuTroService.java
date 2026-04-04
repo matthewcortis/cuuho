@@ -1,7 +1,10 @@
 package com.backend.cuutro.services;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -20,11 +23,14 @@ import com.backend.cuutro.constant.enums.TrangThaiPhieuHoTro;
 import com.backend.cuutro.dto.request.CapNhatTrangThaiPhieuRequest;
 import com.backend.cuutro.dto.request.DieuPhoiPhieuRequest;
 import com.backend.cuutro.dto.request.PhieuCuuTroFilterRequest;
+import com.backend.cuutro.dto.request.TaoChiTietCuuTroRequest;
 import com.backend.cuutro.dto.request.TaoPhieuHoTroRequest;
 import com.backend.cuutro.dto.response.entities.PhanCongDto;
+import com.backend.cuutro.dto.response.entities.PhieuCuuTroChiTietDto;
 import com.backend.cuutro.dto.response.entities.PhieuCuuTroDto;
 import com.backend.cuutro.dto.response.entities.TinNhanDto;
 import com.backend.cuutro.dto.response.entities.TrangThaiPhieuResponse;
+import com.backend.cuutro.entities.ChiTietCuuTroEntity;
 import com.backend.cuutro.entities.DoiNhomEntity;
 import com.backend.cuutro.entities.NguoiDungEntity;
 import com.backend.cuutro.entities.PhanCongEntity;
@@ -34,6 +40,7 @@ import com.backend.cuutro.exception.customize.InvalidFieldException;
 import com.backend.cuutro.mapper.PhanCongMapper;
 import com.backend.cuutro.mapper.PhieuCuuTroMapper;
 import com.backend.cuutro.mapper.TinNhanMapper;
+import com.backend.cuutro.repository.ChiTietCuuTroRepository;
 import com.backend.cuutro.repository.DoiNhomRepository;
 import com.backend.cuutro.repository.DoiNhomTinhNguyenVienRepository;
 import com.backend.cuutro.repository.LoaiSuCoRepository;
@@ -42,6 +49,7 @@ import com.backend.cuutro.repository.PhanCongRepository;
 import com.backend.cuutro.repository.PhieuCuuTroRepository;
 import com.backend.cuutro.repository.TepTinRepository;
 import com.backend.cuutro.repository.TinNhanRepository;
+import com.backend.cuutro.repository.VatPhamRepository;
 import com.backend.cuutro.repository.ViTriRepository;
 import com.backend.cuutro.repository.specification.PhieuCuuTroSpecifications;
 
@@ -65,12 +73,14 @@ public class PhieuCuuTroService {
 			TrangThaiPhieuHoTro.HUY.name());
 
 	private final PhieuCuuTroRepository phieuCuuTroRepository;
+	private final ChiTietCuuTroRepository chiTietCuuTroRepository;
 	private final PhanCongRepository phanCongRepository;
 	private final DoiNhomRepository doiNhomRepository;
 	private final DoiNhomTinhNguyenVienRepository doiNhomTinhNguyenVienRepository;
 	private final LoaiSuCoRepository loaiSuCoRepository;
 	private final ViTriRepository viTriRepository;
 	private final TepTinRepository tepTinRepository;
+	private final VatPhamRepository vatPhamRepository;
 	private final NguoiDungRepository nguoiDungRepository;
 	private final TinNhanRepository tinNhanRepository;
 	private final PhieuCuuTroMapper phieuCuuTroMapper;
@@ -91,7 +101,12 @@ public class PhieuCuuTroService {
 		entity.setSdt(request.getSdt().trim());
 		entity.setGhiChu(request.getGhiChu().trim());
 		entity.setTrangThai(PHIEU_TRANG_THAI_PENDING_DB);
-		return phieuCuuTroMapper.toDto(phieuCuuTroRepository.save(entity));
+		PhieuCuuTroEntity savedPhieu = phieuCuuTroRepository.save(entity);
+		List<ChiTietCuuTroEntity> chiTietCuuTro = buildChiTietCuuTro(savedPhieu, request.getChiTietCuuTro());
+		chiTietCuuTroRepository.saveAll(chiTietCuuTro);
+		PhieuCuuTroDto dto = phieuCuuTroMapper.toDto(savedPhieu);
+		dto.setChiTietCuuTro(toChiTietDtos(chiTietCuuTro));
+		return dto;
 	}
 
 	@Transactional
@@ -179,6 +194,7 @@ public class PhieuCuuTroService {
 		PhieuCuuTroEntity phieu = getPhieuOrThrow(phieuId);
 		PhieuCuuTroDto dto = phieuCuuTroMapper.toDto(phieu);
 		dto.setTrangThai(getTrangThaiNghiepVu(phieu, phanCongRepository.findByPhieuCuuTro_Id(phieuId).orElse(null)).name());
+		dto.setChiTietCuuTro(toChiTietDtos(chiTietCuuTroRepository.findByPhieuCuuTro_IdOrderByIdAsc(phieuId)));
 		return dto;
 	}
 
@@ -240,6 +256,41 @@ public class PhieuCuuTroService {
 	private PhanCongEntity getPhanCongOrThrow(Long phieuId) {
 		return phanCongRepository.findByPhieuCuuTro_Id(phieuId)
 				.orElseThrow(() -> new InvalidFieldException("Phieu chua duoc dieu phoi doi nhom"));
+	}
+
+	private List<ChiTietCuuTroEntity> buildChiTietCuuTro(PhieuCuuTroEntity phieu, List<TaoChiTietCuuTroRequest> chiTietRequests) {
+		Set<Long> vatPhamDaThem = new HashSet<>();
+		List<ChiTietCuuTroEntity> chiTietEntities = new ArrayList<>(chiTietRequests.size());
+
+		for (TaoChiTietCuuTroRequest chiTietRequest : chiTietRequests) {
+			Long vatPhamId = chiTietRequest.getVatPhamId();
+			if (!vatPhamDaThem.add(vatPhamId)) {
+				throw new InvalidFieldException("Khong duoc trung vatPhamId trong chiTietCuuTro");
+			}
+
+			ChiTietCuuTroEntity chiTietEntity = new ChiTietCuuTroEntity();
+			chiTietEntity.setPhieuCuuTro(phieu);
+			chiTietEntity.setVatPham(vatPhamRepository.findById(vatPhamId)
+					.orElseThrow(() -> new EntityNotFoundException("VatPham not found with id=" + vatPhamId)));
+			chiTietEntity.setSoLuong(chiTietRequest.getSoLuong());
+			chiTietEntity.setGhiChu(StringUtils.hasText(chiTietRequest.getGhiChu()) ? chiTietRequest.getGhiChu().trim() : null);
+			chiTietEntities.add(chiTietEntity);
+		}
+
+		return chiTietEntities;
+	}
+
+	private List<PhieuCuuTroChiTietDto> toChiTietDtos(List<ChiTietCuuTroEntity> chiTietEntities) {
+		return chiTietEntities.stream()
+				.map(chiTiet -> PhieuCuuTroChiTietDto.builder()
+						.id(chiTiet.getId())
+						.vatPhamId(chiTiet.getVatPham() != null ? chiTiet.getVatPham().getId() : null)
+						.tenVatPham(chiTiet.getVatPham() != null ? chiTiet.getVatPham().getTenVatPham() : null)
+						.soLuong(chiTiet.getSoLuong())
+						.ghiChu(chiTiet.getGhiChu())
+						.createdAt(chiTiet.getCreatedAt())
+						.build())
+				.toList();
 	}
 
 	private void validateCurrentUserLaDoiTruong(Long doiNhomId) {

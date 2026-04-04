@@ -15,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,7 +28,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "chi_tiet_cuu_tro")
+@Table(name = "chi_tiet_cuu_tro", uniqueConstraints = {
+		@UniqueConstraint(name = "uk_chi_tiet_cuu_tro_phieu_vat_pham", columnNames = { "phieu_cuu_tro_id", "vat_pham_id" })
+})
 public class ChiTietCuuTroEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -38,14 +41,14 @@ public class ChiTietCuuTroEntity implements Serializable {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "phieu_cuu_tro_id")
+	@JoinColumn(name = "phieu_cuu_tro_id", nullable = false)
 	private PhieuCuuTroEntity phieuCuuTro;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "vat_pham_id")
+	@JoinColumn(name = "vat_pham_id", nullable = false)
 	private VatPhamEntity vatPham;
 
-	@Column(name = "so_luong")
+	@Column(name = "so_luong", nullable = false)
 	private Integer soLuong;
 
 	@Column(name = "ghi_chu")

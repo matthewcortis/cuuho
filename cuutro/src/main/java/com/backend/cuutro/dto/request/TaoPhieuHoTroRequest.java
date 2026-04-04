@@ -1,8 +1,11 @@
 package com.backend.cuutro.dto.request;
 
+import java.util.List;
 import java.util.UUID;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -38,6 +41,8 @@ public class TaoPhieuHoTroRequest {
 	@NotBlank(message = "ghiChu is required")
 	String ghiChu;
 
+	@NotEmpty(message = "chiTietCuuTro is required")
+	List<@Valid TaoChiTietCuuTroRequest> chiTietCuuTro;
+
 	UUID nguoiDungId;
 }
-

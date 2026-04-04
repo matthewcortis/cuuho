@@ -83,7 +83,7 @@ CREATE TABLE public.nguoi_dung_phan_quyen (
   nguoi_dung_id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
   phan_quyen_id bigint NOT NULL,
   CONSTRAINT nguoi_dung_phan_quyen_pkey PRIMARY KEY (nguoi_dung_id),
-  CONSTRAINT nguoi_dung_phan_quyen_phan_quyen_id_fkey FOREIGN KEY (phan_quyen_id) REFERENCES public.phan_quyen(id)
+  CONSTRAINT fkiw3y6e70vom8wvipc8dtkh4mk FOREIGN KEY (phan_quyen_id) REFERENCES public.phan_quyen(id)
 );
 CREATE TABLE public.nhom_vat_pham (
   id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
@@ -106,9 +106,9 @@ CREATE TABLE public.phan_cong (
 );
 CREATE TABLE public.phan_quyen (
   id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
-  ten character varying,
+  created_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
   mo_ta character varying,
-  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  ten character varying,
   CONSTRAINT phan_quyen_pkey PRIMARY KEY (id)
 );
 CREATE TABLE public.phieu_cuu_tro (
@@ -144,7 +144,7 @@ CREATE TABLE public.tai_khoan (
   ten_dang_nhap character varying,
   mat_khau character varying,
   trang_thai boolean,
-  vai_tro character varying DEFAULT 'USER'::text CHECK (vai_tro::text = ANY (ARRAY['ADMIN'::text, 'USER'::text, 'VOLUNTEER'::text])),
+  vai_tro character varying DEFAULT 'USER'::text,
   created_at timestamp with time zone DEFAULT now(),
   CONSTRAINT tai_khoan_pkey PRIMARY KEY (id)
 );
