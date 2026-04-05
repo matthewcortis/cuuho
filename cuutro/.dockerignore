@@ -1,10 +1,5 @@
+target/
 .git
 .gitignore
-.idea
-.vscode
-target
-README.md
-HELP.md
-NOTE.md
-*.log
-*.iml
+node_modules
+.DS_Store
